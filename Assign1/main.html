@@ -1,0 +1,135 @@
+<html>
+
+<head>
+    <script src="jquery-3.3.1.js"></script>
+</head>
+
+<body>
+    <ul class="List1">
+        <li>First element</li>
+        <li>Second element</li>
+        <li>Third element</li>
+    </ul>
+
+    <script>
+        $(() => {
+            $("li").each(function (index) {
+                let html = "<b>" + index + ":</b>" + $(this).text();
+                $(this).html(html);
+            });
+        });
+    </script>
+
+    <hr/>
+
+    <input type="text" class="noInput" />
+
+    <script>
+        $(() => {
+            $("input.noInput").keyup(() => {
+                $("input.noInput").val(" ");
+            });
+        });
+    </script>
+
+    <hr/>
+
+    <button id="b1">Click Me</button>
+    <p id="Result1">Click Time: </p>
+
+    <script>
+        $(() => {
+            $("#b1").click(() => {
+                let time = new Date();
+                let initTime = time.getTime();
+                $("p#Result1").text("Click Time: ");
+
+                $("#b1").click(() => {
+                    let etime = new Date();
+                    let endTime = etime.getTime();
+                    let result = endTime - initTime;
+                    $("p#Result1").text("Click Time: " + result);
+                });
+            });
+        });
+    </script>
+
+    <hr/>
+
+    <input id="tb2" type="text" />
+    <p id="Result2">Key Code: </p>
+    <script>  
+        $(() => {
+            $("input#tb2").keydown(function (event) {
+                $("p#Result2").text("Key Code:" + (event.which || event.keyCode)); // (event.which || event.keyCode) To ensure browser support
+            });
+        });
+    </script>
+
+    <hr/>
+    <button id="Start">Start Game</button>
+
+    <p> Type The right Character within 1 second:
+        <span id="RandChar"></span>
+    </p>
+    <input type="text" id="GameInput" />
+    <p id="Result3"></p>
+
+    <script>
+        $(() => {
+            let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let loses = 10;
+            let output = "";
+            let punchTime = 5000;
+
+            let correct = 0;
+
+            $("#Start").click(() => {
+                let RandChar = possible.charAt(Math.floor(Math.random() * possible.length));
+                $("#RandChar").text(RandChar);
+
+                var loop = setInterval(() => {
+                    let RandChar = possible.charAt(Math.floor(Math.random() * possible.length));
+                    $("#RandChar").text(RandChar);
+
+                    /*$("#GameInput").keydown(() => {
+                        let input = $("#GameInput").val();
+                        if (input === RandChar) {
+                            output = "Correct";
+                            correct++;
+                        }
+                    });*/
+
+                    if(correct == 5)
+                    {
+                        punchTime -= 100;
+                        correct = 0;
+                    }
+                    console.log(punchTime);
+
+                    let input = $("#GameInput").val();
+
+                    if (input != RandChar) {
+                        if (loses === 0) {
+                            clearInterval(loop);
+                            output = "Game Over";
+                        }
+                        else {
+                            loses--;
+                            output = "Wrong " + loses + " Attempts Left";
+                        }
+                    }
+                    else{
+                        output = "Correct";
+                        correct++;
+                    }
+
+                    $("#GameInput").val("");
+                    $("#Result3").text(output);
+                }, punchTime)
+            });
+        });
+    </script>
+</body>
+
+</html>
