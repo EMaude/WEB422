@@ -2,6 +2,8 @@
 
 <head>
     <script src="jquery-3.3.1.js"></script>
+    <title>Elliot Maude Assignment 1</title>
+    <h1>Elliot Maude - 032830127 - Assignment 1</h1>
 </head>
 
 <body>
@@ -67,68 +69,92 @@
     </script>
 
     <hr/>
-    <button id="Start">Start Game</button>
-
-    <p> Type The right Character within 1 second:
-        <span id="RandChar"></span>
-    </p>
-    <input type="text" id="GameInput" />
-    <p id="Result3"></p>
+    <p>Enter the Character: <span id="Char"></span></p>
+    <input type="text" id="GameIn" /> 
+    <button id="Start">Start</button>
+    <p id="GameOut"></p>
 
     <script>
+
+        let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+        let character = "";
+        let wins = 0;
+        let concurentWins = 0;
+        let attempts = 10;
+        let punchTimer = 1000; //milliseconds
+        let timer;
+        let waiting = true;
+        let firstTurn = true;
+
         $(() => {
-            let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            let loses = 10;
-            let output = "";
-            let punchTime = 5000;
-
-            let correct = 0;
-
-            $("#Start").click(() => {
-                let RandChar = possible.charAt(Math.floor(Math.random() * possible.length));
-                $("#RandChar").text(RandChar);
-
-                var loop = setInterval(() => {
-                    let RandChar = possible.charAt(Math.floor(Math.random() * possible.length));
-                    $("#RandChar").text(RandChar);
-
-                    /*$("#GameInput").keydown(() => {
-                        let input = $("#GameInput").val();
-                        if (input === RandChar) {
-                            output = "Correct";
-                            correct++;
-                        }
-                    });*/
-
-                    if(correct == 5)
-                    {
-                        punchTime -= 100;
-                        correct = 0;
-                    }
-                    console.log(punchTime);
-
-                    let input = $("#GameInput").val();
-
-                    if (input != RandChar) {
-                        if (loses === 0) {
-                            clearInterval(loop);
-                            output = "Game Over";
-                        }
-                        else {
-                            loses--;
-                            output = "Wrong " + loses + " Attempts Left";
-                        }
-                    }
-                    else{
-                        output = "Correct";
-                        correct++;
-                    }
-
-                    $("#GameInput").val("");
-                    $("#Result3").text(output);
-                }, punchTime)
-            });
+            $("#Start").click(()=>{newTurn(false);});
         });
+        
+        function newTurn(prevState) {
+            let correct = false;
+            
+            if (!firstTurn) {
+                if (prevState) {
+                    $("#GameOut").text("Correct");
+                    wins++;
+                    concurentWins++;
+                }
+                else {
+                    attempts--;
+                    $("#GameOut").text("Wrong: " + attempts) + " attempts left";
+                }
+            }
+            else {
+                firstTurn = false;
+            }
+            //check if new turn is avalible
+            
+              if(concurentWins == 5)
+              {
+                  concurentWins = 0;
+                  punchTimer -= 100;
+                  $("#GameOut").text("Speeding Up");
+              }
+              
+              if(attempts > 0)
+              {
+                character = possible.charAt(Math.floor(Math.random() * possible.length));
+                $("#Char").text(character);
+                $("#GameIn").val("");
+                timer = punchTimer;
+                Turn();
+              }
+              else
+              {
+                  waiting = true;
+                  $("#GameOut").text("Game Over! Score: " + wins);
+              } 
+            //if no turn gameover
+        }
+
+        function CheckIfCorrect() {
+            let input = $("#GameIn").val();
+            return input == character;
+        }
+
+        function Turn() {
+            //check things
+            if (CheckIfCorrect()) {
+                newTurn(true); //sucess, next turn
+            }
+            else //call turn again after x time
+            {
+                $("#GameIn").val("");
+                timer -= 10;
+                if (timer > 0) {
+                    setTimeout(Turn, 10)
+                }
+                else { //no time left, fail the turn
+                    newTurn(false);
+                }
+            }
+        }
+
     </script>
 </body>
 
