@@ -13,7 +13,6 @@
 let employeesModel = [];
 
 $(function(){
-
     initializeEmployeeModel();
 
     $("#employee-search").keyup(function(){
@@ -21,19 +20,27 @@ $(function(){
         refreshEmployeeRows(emp);
     });
 
-    $(".body-row").click(function(){
-        console.log("Click");
-        let id = $(this).attr("data_id").val();
+    $("#employees-table").on("click", '.body-row', function(){
+        event.preventDefault();
+        let id = $(this).data('id');
         let emp = getEmployeeModelById(id);
-        let mDate = moment(emp.HireDate)
-        emp.HireDate = mDate.format("MMM Do YYYY");
 
-        let temp = _.template(  "<strong>Address:</strong> <%- emp.AddressStreet %> <%- emp.AddressState %> <%- emp.AddressCity %> <%- emp.AddressZip %> <br>" + 
-                                "<strong>Phone Number:</strong><%- emp.PhoneNum %> <br>" +
-                                "<strong>Hire Date:</strong> <%- emp.HireDate %>");
+        if(emp != null)
+        {
+            let mDate = moment(emp.HireDate)
+            emp.HireDate = mDate.format("MMMM D, YYYY");
 
-        let res = temp(emp);
-        showGenericModal( emp.FirstName + " " + emp.LastName, res);
+            let temp = _.template(  "<strong>Address:</strong> <%- emp.AddressStreet %> <%- emp.AddressState %> <%- emp.AddressCity %> <%- emp.AddressZip %> <br>" + 
+                                    "<strong>Phone Number:</strong><%- emp.PhoneNum %> <br>" +
+                                    "<strong>Hire Date:</strong> <%- emp.HireDate %>");
+
+            let res = temp({'emp' : emp});
+            showGenericModal( emp.FirstName + " " + emp.LastName, res);
+        }
+        else
+        {
+            showGenericModal("Error", "Id not found in database");
+        }
     });
 
     $("#teams-menu").on("click",function(event){
@@ -105,15 +112,16 @@ function initializeEmployeeModel(){
 }
 
 function showGenericModal(title, message){
-    $("#generic-modal.modal-header").html(title);
-    $("#generic-modal.modal-body").html(message);
-    $("#generic-modal").show();    
+    console.log("Title: " + title + " Message: " + message);
+    $(".modal-title").html(title);
+    $(".modal-body").html(message);
+    $("#genericModal").modal('show');    
 }
 
 function refreshEmployeeRows(employees)
 {
     let empTemplate = _.template('<% _.forEach(employees, function(employee) { %>' +
-                                    '<div class="row body-row" data-id=<%- employee.id %>>' +
+                                    '<div class="row body-row" data-id="<%- employee._id %>">' +
                                         '<div class="col-xs-4 body-column"><%- employee.FirstName %></div>' +
                                         '<div class="col-xs-4 body-column"><%- employee.LastName %></div>' +
                                         '<div class="col-xs-4 body-column"><%- employee.Position.PositionName %></div>' +
@@ -135,15 +143,13 @@ function getFilteredEmployeesModel(filterString)
 }
 
 function getEmployeeModelById(id)
-{
-   let findI = _.findIndex(employees, function(employee) {
+{    
+   let index = _.findIndex(employeesModel, function(employee) {   
        return employee._id == id;
    });
 
-   let index = findI({employees: employeesModel});
    let obj = null
-
-   if(index > 0)
+   if(index >= 0)
    {
        obj = _.cloneDeep(employeesModel[index]);
    }
