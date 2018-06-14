@@ -1,92 +1,102 @@
+/*********************************************************************************
+* WEB422 – Assignment 03
+* I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part of this
+* assignment has been copied manually or electronically from any other source (including web sites) or
+* distributed to other students.
+*
+* Name: Elliot Maude Student ID: 032830127 Date: 6/14/18
+*
+********************************************************************************/ 
+
 let ViewModel = {
-    teams: ko.observable([]),
-    employees: ko.observable([]),
-    projects: ko.observable([]),
+    teams: ko.observableArray([]),
+    employees: ko.observableArray([]),
+    projects: ko.observableArray([])
 };
 
-function showGenericModal(title,message)
-{
-    $(".modal-title").html(title);
+function showGenericModal(title, message) {
+    $(".modal-header").html(title);
     $(".modal-body").html(message);
     $('#genericModal').modal({});
 }
 
-function initalizeTeams()
-{
-    return new Promise(function(resolve, reject){
+function initalizeTeams() {
+    return new Promise(function (resolve, reject) {
         $.ajax({
             url: "http://localhost:8081/teams-raw",
-            type:"GET",
+            type: "GET",
             contentType: "application/json"
-        }).done(function(data) {
-            ViewModel.teams = ko.mapping.fromJS(data);
+        }).done(function (data) {
+            ko.mapping.fromJS(data, {}, ViewModel.teams);
             resolve();
-        }).fail(function(err){
+        }).fail(function (err) {
             reject("Error loading the team data");
         });
     });
 }
 
-function initalizeEmployees()
-{
-    return new Promise(function(resolve, reject){
+function initalizeEmployees() {
+    return new Promise(function (resolve, reject) {
         $.ajax({
             url: "http://localhost:8081/employees",
-            type:"GET",
+            type: "GET",
             contentType: "application/json"
-        }).done(function(data) {
-            ViewModel.employees = ko.mapping.fromJS(data);
+        }).done(function (data) {
+            ko.mapping.fromJS(data, {}, ViewModel.employees);
             resolve();
-        }).fail(function(err){
+        }).fail(function (err) {
             reject("Error loading the employee data");
         });
     });
 }
 
-function initalizeProjects()
-{
-    return new Promise(function(resolve, reject){
+function initalizeProjects() {
+    return new Promise(function (resolve, reject) {
         $.ajax({
             url: "http://localhost:8081/projects",
-            type:"GET",
+            type: "GET",
             contentType: "application/json"
-        }).done(function(data) {
-            ViewModel.projects = ko.mapping.fromJS(data);
+        }).done(function (data) {
+            ko.mapping.fromJS(data, {}, ViewModel.projects);
             resolve();
-        }).fail(function(err){
+        }).fail(function (err) {
             reject("Error loading the project data");
         });
     });
 }
 
-$(function(){ //DOM Ready
+$(function () { //DOM Ready
     initalizeTeams()
-    .then(initalizeEmployees())
-    .then(initalizeProjects())
-    .then(function(){
-        ko.applyBindings(ViewModel);
-        $(".multiple").multipleSelect({ filter: true });
-        $(".single").multipleSelect({ single: true, filter: true });
-    }).catch(function(err){
-        showGenericModal("Error", err);
-    });
+        .then(initalizeEmployees)
+        .then(initalizeProjects)
+        .then(
+            function () {
+                ko.applyBindings(ViewModel);
+                $(".multiple").multipleSelect({ filter: true });
+                $(".single").multipleSelect({ single: true, filter: true });
+            }).catch(function (err) {
+                showGenericModal("Error", err);
+            });
 });
 
-function saveTeam()
-{
-    let currentTeam = this;
+ViewModel.save = function saveTeam() {
+    let currentTeam = ko.mapping.toJS(this);
+    console.log(currentTeam._id);
     $.ajax({
-        url: "http://localhost:8081/team/:" + currentTeam._id,
-        type:"PUT",
-        dataType: "json",
+        url: "http://localhost:8081/team/" + currentTeam._id,
+        type: "PUT",
+        contentType: "application/json",
         data: JSON.stringify({
-            Projects: currentTeam.projects,
-            Employees: currentTeam.employees,
+            Projects: currentTeam.Projects,
+            Employees: currentTeam.Employees,
             TeamLead: currentTeam.TeamLead
-        })
-    }).done(function() {
-        showGenericModal("Success", currentTeam.TeamName + " Updated" );
-    }).fail(function(err){
+        }),
+        success: function(res){
+            console.log(res);
+        }
+    }).done(function () {
+        showGenericModal("Success", currentTeam.TeamName + " Updated");
+    }).fail(function (err) {
         showGenericModal("Error", "Error updating the team information");
     });
 }

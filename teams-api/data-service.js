@@ -362,7 +362,7 @@ module.exports = function(mongoDBConnectionString){
                             reject(err);
                         });
                 } else {
-                    resolve();
+                    resolve(-1);
                 }
             });
         },
