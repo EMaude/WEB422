@@ -27,7 +27,7 @@ $(function(){
 
         if(emp != null)
         {
-            let mDate = moment(emp.HireDate)
+            let mDate = moment(emp.HireDate);
             emp.HireDate = mDate.format("MMMM D, YYYY");
 
             let temp = _.template(  "<strong>Address:</strong> <%- emp.AddressStreet %> <%- emp.AddressState %> <%- emp.AddressCity %> <%- emp.AddressZip %> <br>" + 
