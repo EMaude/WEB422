@@ -12,7 +12,6 @@ class Overview extends Component {
                 <h1 className="page-header">Overview</h1>
                 <div className="row">
                     <div className="col-md-4">
-
                         <ProjectsPanel />
                     </div>
                     <div className="col-md-4">
