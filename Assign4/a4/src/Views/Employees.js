@@ -22,7 +22,7 @@ class Employees extends Component {
     }
 
     componentDidMount() {
-        Axios.get('http://localhost:8081/employees')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/employees')
             .then(res => {
                 this.setState({employees: res.data});
             })

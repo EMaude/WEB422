@@ -20,7 +20,7 @@ class Teams extends Component {
     }
 
     componentDidMount() {
-        Axios.get('http://localhost:8081/teams-raw')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/teams-raw')
             .then((res) => {
                 this.setState({ teams: res.data });
 
@@ -35,7 +35,7 @@ class Teams extends Component {
 
     projects() {
         let TeamData = this.state.teams;
-        Axios.get('http://localhost:8081/Projects')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/Projects')
             .then(res => {
                 TeamData.forEach((element, index, array) => {
                     for (let i = 0; i < res.data.length; i++) {
@@ -55,7 +55,7 @@ class Teams extends Component {
 
     TeamLead() {
         let TeamData = this.state.teams;
-        Axios.get('http://localhost:8081/Employees')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/Employees')
             .then(res => {
                 TeamData.forEach((element, index, array) => {
                     for (let i = 0; i < res.data.length; i++) {

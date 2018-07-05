@@ -11,7 +11,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
-moment().format();
+import {Link} from 'react-router-dom'
 
 class ProjectsPanel extends Component {
 
@@ -21,7 +21,7 @@ class ProjectsPanel extends Component {
     }
 
     componentDidMount() {
-        Axios.get('http://localhost:8081/projects')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/projects')
         .then(res => { 
             this.setState({projects: res.data});
         })
@@ -51,7 +51,7 @@ class ProjectsPanel extends Component {
                             </tbody>
                         </table>
                     </div>
-                    <a href="/projects" className="btn btn-primary form-control">View All Project Data</a>
+                    <Link to="/projects" className="btn btn-primary form-control">View All Project Data</Link>
                 </div>
             </div>
         );

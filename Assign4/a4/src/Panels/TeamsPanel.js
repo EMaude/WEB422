@@ -9,6 +9,7 @@
 ********************************************************************************/ 
 import React, { Component } from 'react';
 import Axios from 'axios';
+import {Link} from 'react-router-dom'
 
 class TeamsPanel extends Component {
 
@@ -18,7 +19,7 @@ class TeamsPanel extends Component {
     }
 
     componentDidMount() {
-        Axios.get('http://localhost:8081/teams-raw')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/teams-raw')
         .then(res => { 
             this.setState({teams: res.data});
         })
@@ -48,7 +49,7 @@ class TeamsPanel extends Component {
                             </tbody>
                         </table>
                     </div>
-                    <a href="/projects" className="btn btn-primary form-control">View All Project Data</a>
+                    <Link to ="/projects" className="btn btn-primary form-control">View All Team Data</Link>
                 </div>
             </div>
         );

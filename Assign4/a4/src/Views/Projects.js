@@ -20,7 +20,7 @@ class Projects extends Component {
     }
 
     componentDidMount() {
-        Axios.get('http://localhost:8081/projects')
+        Axios.get('https://polar-mountain-95409.herokuapp.com/projects')
             .then(res => {
                 this.setState({ projects: res.data });
             })
