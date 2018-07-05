@@ -49,7 +49,7 @@ class TeamsPanel extends Component {
                             </tbody>
                         </table>
                     </div>
-                    <Link to ="/projects" className="btn btn-primary form-control">View All Team Data</Link>
+                    <Link to ="/teams" className="btn btn-primary form-control">View All Team Data</Link>
                 </div>
             </div>
         );

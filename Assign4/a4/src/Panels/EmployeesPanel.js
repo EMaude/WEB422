@@ -49,7 +49,7 @@ class EmployeesPanel extends Component {
                             </tbody>
                         </table>
                     </div>
-                    <Link to="/projects" className="btn btn-primary form-control">View All Employee Data</Link>
+                    <Link to="/employees" className="btn btn-primary form-control">View All Employee Data</Link>
                 </div>
             </div>
         );
