@@ -6,7 +6,13 @@ import {EmployeesComponent} from  "./employees/employees.component";
 import {PositionsComponent} from  "./positions/positions.component";
 import {NotfoundComponent} from  "./notfound/notfound.component";
 
-const routes: Routes = [];
+const routes: Routes = [
+  {path: 'home', component: HomeComponent},
+  {path: 'employees', component: EmployeesComponent},
+  {path: 'positions', component: PositionsComponent},
+  {path: '',  redirectTo: 'home', pathMatch: 'full'},
+  {path: '**', component: NotfoundComponent}  
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
