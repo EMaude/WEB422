@@ -1,7 +1,29 @@
+<div class="center">
+    <h2>Employees</h2>
+</div>
+
 <div class="container">
     <div class="row">
-    <div class="col-md-12">
-    …
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                        <td>Name</td> 
+                        <td>Address</td> 
+                        <td>Phone</td> 
+                        <td>Hire Date</td> 
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let emp of employees" >
+                            <td>{{emp.FirstName}} {{emp.LastName}}</td> 
+                            <td>{{emp.AddressStreet}} {{emp.AddressCity}} {{emp.AddressState}} {{emp.AddressZip}}</td> 
+                            <td>{{emp.PhoneNum}}</td> 
+                            <td>{{emp.HireDate | date:'longDate'}}</td> 
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
     </div>
-    </div>
-    </div>
+</div>

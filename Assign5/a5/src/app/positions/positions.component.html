@@ -1,7 +1,27 @@
+<div class="center">
+  <h2>Positions</h2>
+</div>
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      …
+      <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+          <thead>
+            <td>Position</td>
+            <td>Description</td>
+            <td>Salary</td>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pos of positions">
+              <td>{{pos.PositionName}}</td>
+              <td>{{pos.PositionDescription}}</td>
+              <td>{{pos.PositionBaseSalary |  number:'.2'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </div>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {PositionService} from '../data/position.service';
+import {Position} from '../data/vm-teams';
 
 @Component({
   selector: 'app-positions',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PositionsComponent implements OnInit {
 
-  constructor() { }
+  positions: Position[];
+  getPositionSub: any;
+  loadingError: boolean = false;
+
+  constructor(private positionService: PositionService) { }
 
   ngOnInit() {
+    this.getPositionSub = this.positionService.getPositions().subscribe(emp => this.positions = emp, err =>  this.loadingError = true);
   }
 
+  ngOnDestroy(){ 
+    if( this.getPositionSub != undefined)
+    {
+      this.getPositionSub.unsubscribe();
+    }
+  }
 }
